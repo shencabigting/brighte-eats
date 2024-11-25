@@ -1,0 +1,26 @@
+{
+  "name": "brighte-eats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.11.2",
+    "@types/sequelize": "^4.28.20",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.9.0",
+    "mysql2": "^3.11.4",
+    "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.3",
+    "typescript": "^5.7.2"
+  }
+}
