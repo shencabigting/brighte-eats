@@ -38,6 +38,8 @@ export const resolvers = {
                 if (err.name == 'SequelizeUniqueConstraintError') {
                     throw new Error('Email or mobile already registered.');
                 }
+
+                throw new Error('Failed to register new user preference.');
             }
         }
     },
