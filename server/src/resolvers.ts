@@ -1,4 +1,4 @@
-import User from './models/User';
+import User from './models/User.js';
 
 export const resolvers = {
     Query: {
@@ -15,6 +15,7 @@ export const resolvers = {
     },
     Mutation: {
         register: async (parent, { input }) => {
+            console.log("HELLO");
             const {
                 name,
                 email,
@@ -35,6 +36,8 @@ export const resolvers = {
                 return user;
             }
             catch(err) {
+                console.log("ERROR:", err);
+
                 if (err.name == 'SequelizeUniqueConstraintError') {
                     throw new Error('Email or mobile already registered.');
                 }
