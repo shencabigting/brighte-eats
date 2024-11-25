@@ -9,7 +9,7 @@ let mockInput: {
     email: string
     mobile: string
     postcode: string
-    services: [string]
+    services: string[]
 };
 
 beforeEach(() => {
@@ -30,7 +30,7 @@ describe('register Mutation', () => {
         const mockUser = { id: 1, ...mockInput };
 
         // Mock the create function to resolve with the inputed data and an ID
-        (User.create as jest.Mock).mockResolvedValue({ id: 1, ...mockInput });
+        (User.create as jest.Mock).mockResolvedValue(mockUser);
     
         // Call register mutation
         const result = await register(null, { input: mockInput });
