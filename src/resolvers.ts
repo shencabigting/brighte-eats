@@ -1,4 +1,4 @@
-import User from './models/User.js';
+import User from './models/User';
 
 export const resolvers = {
     Query: {
@@ -14,16 +14,14 @@ export const resolvers = {
         } 
     },
     Mutation: {
-        register: async (parent, args, context) => {
+        register: async (parent, { input }) => {
             const {
-                input: {
-                    name,
-                    email,
-                    mobile,
-                    postcode,
-                    services
-                }
-            } = args;
+                name,
+                email,
+                mobile,
+                postcode,
+                services
+            } = input;
 
             try {
                 const user = await User.create({
