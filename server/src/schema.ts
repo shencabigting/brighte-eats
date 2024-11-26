@@ -33,7 +33,7 @@ input registerUserInput {
     email: String!
     mobile: String
     postcode: String
-    services: [Service]
+    services: [Service]!
 }
 
 type Mutation {
