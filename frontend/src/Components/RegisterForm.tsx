@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { REGISTER_USER } from "../GraphQL/Mutations";
 import { useMutation } from "@apollo/client";
 
-function RegisterForm() {
+const RegisterForm: React.FC = () => {
   const [status, setStatus] = useState<{ type: string }>();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -150,6 +150,6 @@ function RegisterForm() {
       <button onClick={registerUser}>Register User</button>
     </div>
   );
-}
+};
 
 export default RegisterForm;

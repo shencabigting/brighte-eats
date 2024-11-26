@@ -14,7 +14,7 @@ export const resolvers = {
         } 
     },
     Mutation: {
-        register: async (parent, { input }) => {
+        register: async (_, { input }) => {
             const {
                 name,
                 email,

@@ -7,6 +7,20 @@ export const LEADS = gql`
             name
             email
             mobile
+            postcode
+            services
         }
     }
+`;
+
+export const LEAD = gql`
+    query Lead($leadId: ID!) {
+        lead(id: $leadId) {
+            name,
+            email,
+            mobile,
+            postcode,
+            services
+        }
+}
 `;
