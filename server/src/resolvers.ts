@@ -15,7 +15,6 @@ export const resolvers = {
     },
     Mutation: {
         register: async (parent, { input }) => {
-            console.log("HELLO");
             const {
                 name,
                 email,
@@ -36,7 +35,7 @@ export const resolvers = {
                 return user;
             }
             catch(err) {
-                console.log("ERROR:", err);
+                console.log("ERROR:", err); // remove later
 
                 if (err.name == 'SequelizeUniqueConstraintError') {
                     throw new Error('Email or mobile already registered.');
