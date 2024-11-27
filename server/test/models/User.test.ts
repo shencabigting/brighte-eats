@@ -5,7 +5,6 @@ let mockData: {
     email: string
     mobile: string
     postcode: string
-    services: string[]
 };
 
 beforeEach(() => {
@@ -14,7 +13,6 @@ beforeEach(() => {
         email: 'john.doe@example.com',
         mobile: '1234567890',
         postcode: '0000',
-        services: ['PICKUP'],
     };
 });
 
@@ -80,36 +78,6 @@ describe('User model validations', () => {
             } catch (error) {
                 expect(error).toBeDefined();
                 expect(error.errors[0].message).toBe('Validation isInt on postcode failed');
-            }
-        });
-    });
-
-    describe('services field validations', () => {
-        it('should not throw an error if services is valid', async () => {
-            try {
-                await User.build(mockData).validate();
-            } catch (error) {
-                expect(error).toBe(undefined);
-            }
-        });
-
-        it('should throw an error if services is null', async () => {
-            try {
-                delete mockData.services;
-                await User.build(mockData).validate();
-            } catch (error) {
-                expect(error).toBeDefined();
-                expect(error.errors[0].message).toBe('User.services cannot be null');
-            }
-        });
-
-        it('should throw an error if services is empty array', async () => {
-            try {
-                mockData.services = [];
-                await User.build(mockData).validate();
-            } catch (error) {
-                expect(error).toBeDefined();
-                expect(error.errors[0].message).toBe('Array of at least 1 value is required.');
             }
         });
     });

@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../sequelize.js';
+import Lead from './Lead.js';
 
 class User extends Model {
     public id!: number;
@@ -7,7 +8,6 @@ class User extends Model {
     public email!: string;
     public mobile!: string;
     public postcode!: string;
-    public services!: string[];
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
@@ -45,24 +45,15 @@ User.init(
                 isInt: true,
             },
         },
-        services: {
-            type: DataTypes.JSON,
-            allowNull: false,
-            validate: {
-                notEmpty: true,
-                isEmptyArray(val:string) {
-                    // custom validator
-                    if (!Array.isArray(val) || val.length === 0) {
-                        throw new Error("Array of at least 1 value is required.");
-                    }
-                },
-            }
-        },
     },
     {
         sequelize,
         tableName: 'user',
     }
 );
+
+// Define the association with a custom foreign key
+User.hasMany(Lead, { foreignKey: 'user' });
+Lead.belongsTo(User, { foreignKey: 'user' });
 
 export default User;

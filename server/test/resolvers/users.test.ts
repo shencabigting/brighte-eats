@@ -3,7 +3,7 @@ import { resolvers } from '../../src/resolvers';
 
 jest.mock('../../src/models/User');
 
-let leads: any;
+let users: any;
 let mockData: {
     name: string
     email: string
@@ -15,7 +15,7 @@ let mockData: {
 beforeEach(() => {
     jest.resetAllMocks();
 
-    leads = resolvers.Query.leads;
+    users = resolvers.Query.users;
     mockData = [
         {
             name: 'John Doe',
@@ -34,7 +34,7 @@ beforeEach(() => {
     ];
 });
 
-describe('leads Query', () => {
+describe('users Query', () => {
     it('should return a complete list of users', async () => {
         const mockId = 1;
         const mockUsers = mockData.map((x, i) => Object.assign(x, {id: i}));
@@ -42,8 +42,8 @@ describe('leads Query', () => {
         // Mock the create function to resolve with the mock data
         (User.findAll as jest.Mock).mockResolvedValue(mockUsers);
     
-        // Call leads query
-        const result = await leads();
+        // Call users query
+        const result = await users();
     
         // Assert database call and result
         expect(User.findAll).toHaveBeenCalledWith();

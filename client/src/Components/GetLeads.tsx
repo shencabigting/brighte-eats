@@ -1,48 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, TableCell, TableRow } from "@mui/material";
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { LEADS } from "../GraphQL/Queries";
 
 const GetLeads: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleRowClick = (userId: number) => {
-    navigate(`/lead/${userId}`);
+  const handleRowClick = (service: string) => {
+    navigate(`/lead/${service}`);
   };
 
   type QueryResponse = {
-    id: number;
-    name: string;
-    email: string;
-    mobile: string;
-    postcode: string;
-    services: string[];
+    service: string;
+    count: number;
   };
   const { error, loading, data } = useQuery(LEADS);
-  const [users, setUsers] = useState<QueryResponse[]>([]);
+  const [leads, setLeads] = useState<QueryResponse[]>([]);
+
   useEffect(() => {
     if (data) {
-      setUsers(data.leads);
+      setLeads(data.leads);
     }
   }, [data]);
+
   return (
     <div>
-      <h2>Leads Page</h2>
-      <Table>
-        {users.map((user) => {
-          return (
-            <TableRow onClick={() => handleRowClick(user.id)}>
-              <TableCell>{user.id}</TableCell>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.mobile}</TableCell>
-              <TableCell>{user.postcode}</TableCell>
-              <TableCell>{user.services.join(", ")}</TableCell>
+      <h2 style={{ textAlign: "center" }}>Leads Page</h2>
+      <p style={{ textAlign: "center" }}>Click on item for more information.</p>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Service</TableCell>
+              <TableCell>Number of Interested Users</TableCell>
             </TableRow>
-          );
-        })}
-      </Table>
+          </TableHead>
+          <TableBody>
+            {leads.map((lead) => {
+              return (
+                <TableRow
+                  onClick={() => handleRowClick(lead.service)}
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "#ddeef0",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <TableCell>{lead.service}</TableCell>
+                  <TableCell>{lead.count}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

@@ -17,15 +17,23 @@ type User {
     email: String
     mobile: String
     postcode: String
-    services: [Service]
+}
+
+# this "Lead" type defines the data returned by leads query which is the number of interest shown in a service
+type Lead {
+    service: Service,
+    count: Int,
+    users: [User]
 }
 
 # The "Query" type is special: it lists all of the available queries that
 # clients can execute, along with the return type for each. In this
 # case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
-    leads: [User],
-    lead(id: ID!): User,
+    users: [User],
+    user(id: ID!): User,
+    leads: [Lead],
+    lead(service: Service!): Lead,
 }
 
 input registerUserInput {

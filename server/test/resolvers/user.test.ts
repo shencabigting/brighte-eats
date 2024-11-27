@@ -3,7 +3,7 @@ import { resolvers } from '../../src/resolvers';
 
 jest.mock('../../src/models/User');
 
-let lead: any;
+let user: any;
 let mockData: {
     name: string
     email: string
@@ -15,7 +15,7 @@ let mockData: {
 beforeEach(() => {
     jest.resetAllMocks();
 
-    lead = resolvers.Query.lead;
+    user = resolvers.Query.user;
     mockData = {
         name: 'John Doe',
         email: 'john.doe@example.com',
@@ -25,7 +25,7 @@ beforeEach(() => {
     };
 });
 
-describe('lead Query', () => {
+describe('user Query', () => {
     it('should return a user successfully', async () => {
         const mockId = 1;
         const mockUser = { id: mockId, ...mockData };
@@ -34,7 +34,7 @@ describe('lead Query', () => {
         (User.findOne as jest.Mock).mockResolvedValue(mockUser);
     
         // Call lead query
-        const result = await lead(null, { id: mockId });
+        const result = await user(null, { id: mockId });
     
         // Assert database call and result
         expect(User.findOne).toHaveBeenCalledWith({ where: { id: mockId } });
