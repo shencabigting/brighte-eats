@@ -5,7 +5,7 @@ let mockData: {
     email: string
     mobile: string
     postcode: string
-    services: string
+    services: string[]
 };
 
 beforeEach(() => {
@@ -14,11 +14,11 @@ beforeEach(() => {
         email: 'john.doe@example.com',
         mobile: '1234567890',
         postcode: '0000',
-        services: JSON.stringify(['PICKUP']),
+        services: ['PICKUP'],
     };
 });
 
-describe.only('User model validations', () => {
+describe('User model validations', () => {
     describe('name field validations', () => {
         it('should throw an error if name is null', async () => {
             try {
@@ -103,9 +103,9 @@ describe.only('User model validations', () => {
             }
         });
 
-        it('should throw an error if services is not valid array', async () => {
+        it('should throw an error if services is empty array', async () => {
             try {
-                mockData.services = '1';
+                mockData.services = [];
                 await User.build(mockData).validate();
             } catch (error) {
                 expect(error).toBeDefined();

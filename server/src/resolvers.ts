@@ -29,14 +29,12 @@ export const resolvers = {
                     email: email,
                     mobile: mobile,
                     postcode: postcode,
-                    services: JSON.stringify(services)
+                    services: services
                 });
 
                 return user;
             }
             catch(err) {
-                console.log("ERROR:", err); // remove later
-
                 if (err.name == 'SequelizeUniqueConstraintError') {
                     throw new Error('Email or mobile already registered.');
                 }

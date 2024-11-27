@@ -7,7 +7,7 @@ class User extends Model {
     public email!: string;
     public mobile!: string;
     public postcode!: string;
-    public services!: string;
+    public services!: string[];
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
@@ -46,13 +46,13 @@ User.init(
             },
         },
         services: {
-            type: DataTypes.STRING,
+            type: DataTypes.JSON,
             allowNull: false,
             validate: {
                 notEmpty: true,
                 isEmptyArray(val:string) {
-                    const parsedData = JSON.parse(val);
-                    if (!Array.isArray(parsedData) || parsedData.length === 0) {
+                    // custom validator
+                    if (!Array.isArray(val) || val.length === 0) {
                         throw new Error("Array of at least 1 value is required.");
                     }
                 },

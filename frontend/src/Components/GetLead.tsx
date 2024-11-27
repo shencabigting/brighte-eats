@@ -22,7 +22,6 @@ const GetLead: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("hellllooo", data);
       setUser(data.lead);
     }
   }, [data]);

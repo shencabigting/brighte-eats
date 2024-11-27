@@ -36,7 +36,7 @@ describe('register Mutation', () => {
         const result = await register(null, { input: mockInput });
     
         // Assert database call and result
-        expect(User.create).toHaveBeenCalledWith(Object.assign(mockInput, {services: JSON.stringify(mockInput.services)}));
+        expect(User.create).toHaveBeenCalledWith(mockInput);
         expect(result).toEqual(mockUser);
     });
 
@@ -49,7 +49,7 @@ describe('register Mutation', () => {
         await expect(register(null, { input: mockInput })).rejects.toThrow('Email or mobile already registered.');;
     
         // Assert database call and result
-        expect(User.create).toHaveBeenCalledWith(Object.assign(mockInput, {services: JSON.stringify(mockInput.services)}));
+        expect(User.create).toHaveBeenCalledWith(mockInput);
     });
 
     it('should throw generic error if any other error is encountered', async () => {
@@ -61,6 +61,6 @@ describe('register Mutation', () => {
         await expect(register(null, { input: mockInput })).rejects.toThrow('Failed to register new user preference.');;
     
         // Assert database call and result
-        expect(User.create).toHaveBeenCalledWith(Object.assign(mockInput, {services: JSON.stringify(mockInput.services)}));
+        expect(User.create).toHaveBeenCalledWith(mockInput);
     });
 });
