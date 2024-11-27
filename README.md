@@ -6,7 +6,7 @@ edit later
 
 ## Features
 
-- **CRUD Operations:** Create, Read, Update, Delete operations for managing entities.
+- **CRUD Operations:** Create, Read, ~~Update~~, ~~Delete~~ operations for managing entities.
 - **Type Safety:** Fully typed GraphQL schema using TypeScript.
 - **Database:** MySQL database integration using Sequelize ORM.
 
@@ -26,7 +26,7 @@ Before you begin, ensure you have met the following requirements:
 
 - Docker
 
-If not using Docker, make sure you have the following:
+If not using Docker, ensure you have met the following requirements:
 
 - Node.js (v20 or higher)
 - MySQL
@@ -59,7 +59,7 @@ If not using Docker, make sure you have the following:
 
    ```
 
-4. **To shutdown the application:**
+4. **To shutdown the application**
 
    ```bash
    make down
@@ -87,6 +87,7 @@ If not using Docker, make sure you have the following:
    ```
 
 3. **Make sure you have a running MySQL instance**
+   Use init.sql to create the database tables
 
 4. **Install all dependencies and run the GraphQL server**
 
