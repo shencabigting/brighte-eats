@@ -1,12 +1,15 @@
 import { Sequelize } from 'sequelize';
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+
+// Specify the path to your .env file in the project's root directory
+dotenv.config({ path: './../.env' });
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME as string, // database name of your project
-    process.env.DB_USER as string, // MySQL user
-    process.env.DB_PASS as string, // MySQL password
+    process.env.MYSQL_DATABASE as string, // database name of your project
+    process.env.MYSQL_USER as string, // MySQL user
+    process.env.MYSQL_PASSWORD as string, // MySQL password
     {
-        host: process.env.DB_HOST as string, // MySQL host
+        host: process.env.MYSQL_HOST as string, // MySQL host
         dialect: 'mysql',  // Specify MySQL as the database
         logging: false,    // Disable query logging
     });
