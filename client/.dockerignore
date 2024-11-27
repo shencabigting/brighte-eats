@@ -1,0 +1,38 @@
+# Node modules (can be installed inside the Docker container)
+node_modules/
+client/node_modules/
+
+# Build output for both React and Node.js (compiled files will be generated during build)
+client/build/
+server/dist/
+
+# Log files
+*.log
+
+# Temporary files from various editors
+.vscode/
+.idea/
+*.swp
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# TypeScript-related files (can be regenerated on build)
+*.tsbuildinfo
+
+# Environment files (if you're using .env, add specific ones if needed)
+.env
+.env.local
+.env.*.local
+
+# Docker-related files (exclude files used for building the image)
+Dockerfile
+docker-compose.yml
+
+# Test and coverage directories
+coverage/
+
+# Ignore the Git directory (unless you need it)
+.git/
+.gitignore

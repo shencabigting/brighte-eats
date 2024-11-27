@@ -5,11 +5,11 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: './../.env' });
 
 const sequelize = new Sequelize(
-    process.env.MYSQL_DATABASE as string, // database name of your project
-    process.env.MYSQL_USER as string, // MySQL user
-    process.env.MYSQL_PASSWORD as string, // MySQL password
+    process.env.DATABASE_NAME as string, // database name of your project
+    process.env.DATABASE_USER as string, // MySQL user
+    process.env.DATABASE_PASSWORD as string, // MySQL password
     {
-        host: process.env.MYSQL_HOST as string, // MySQL host
+        host: process.env.DATABASE_HOST as string, // MySQL host
         dialect: 'mysql',  // Specify MySQL as the database
         logging: false,    // Disable query logging
     });
