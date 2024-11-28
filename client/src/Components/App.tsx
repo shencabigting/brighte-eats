@@ -46,7 +46,6 @@ const App: React.FC = () => {
 const RegistrationPage: React.FC = () => (
   <div>
     <RegisterForm />
-    <Link to="/leads">Go to Leads Page</Link>
   </div>
 );
 

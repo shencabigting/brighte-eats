@@ -6,8 +6,8 @@ class User extends Model {
     public id!: number;
     public name!: string;
     public email!: string;
-    public mobile!: string;
-    public postcode!: string;
+    public mobile: string;
+    public postcode: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
@@ -41,9 +41,6 @@ User.init(
         },
         postcode: {
             type: DataTypes.STRING,
-            validate: {
-                isInt: true,
-            },
         },
     },
     {
