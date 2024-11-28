@@ -89,6 +89,7 @@ export const resolvers = {
                 return Object.assign(user, {services: services});
             }
             catch(err) {
+                console.log("err", err);
                 // Check for Unique Constraint Error (for duplicate email or mobile)
                 if (err.name == 'SequelizeUniqueConstraintError') {
                     throw new Error('Email or mobile already registered.');
