@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   ApolloClient,
   InMemoryCache,
@@ -7,11 +7,10 @@ import {
   HttpLink,
   from,
 } from "@apollo/client";
+import { Box, Link } from "@mui/material";
 import { onError } from "@apollo/client/link/error";
 import GetLeads from "./GetLeads";
 import GetLead from "./GetLead";
-import GetUsers from "./GetUsers";
-import GetUser from "./GetUser";
 import RegisterForm from "./RegisterForm";
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -35,8 +34,6 @@ const App: React.FC = () => {
           <Route path="/" element={<RegistrationPage />} />
           <Route path="/leads" element={<LeadsPage />} />
           <Route path="/lead/:service" element={<LeadPage />} />
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/user/:id" element={<UserPage />} />
         </Routes>
       </Router>
     </ApolloProvider>
@@ -46,6 +43,11 @@ const App: React.FC = () => {
 const RegistrationPage: React.FC = () => (
   <div>
     <RegisterForm />
+    <div style={{ textAlign: "center" }}>
+      <Box sx={{ marginTop: 4, marginBottom: 4 }}>
+        <Link href="/leads" underline="hover">Go to leads page</Link>
+      </Box>
+    </div>
   </div>
 );
 
@@ -53,7 +55,9 @@ const LeadsPage: React.FC = () => (
   <div>
     <GetLeads />
     <div style={{ textAlign: "center" }}>
-      <Link to="/">Go back to registration page</Link>
+      <Box sx={{ marginTop: 4, marginBottom: 4 }}>
+        <Link href="/">Go back to registration page</Link>
+      </Box>
     </div>
   </div>
 );
@@ -62,25 +66,9 @@ const LeadPage: React.FC = () => (
   <div>
     <GetLead />
     <div style={{ textAlign: "center" }}>
-      <Link to="/leads">Go back to leads page</Link>
-    </div>
-  </div>
-);
-
-const UsersPage: React.FC = () => (
-  <div>
-    <GetUsers />
-    <div style={{ textAlign: "center" }}>
-      <Link to="/">Go back to registration page</Link>
-    </div>
-  </div>
-);
-
-const UserPage: React.FC = () => (
-  <div>
-    <GetUser />
-    <div style={{ textAlign: "center" }}>
-      <Link to="/users">Go back to users page</Link>
+      <Box sx={{ marginTop: 4, marginBottom: 4 }}>
+        <Link href="/leads">Go back to leads page</Link>
+      </Box>
     </div>
   </div>
 );

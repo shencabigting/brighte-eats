@@ -38,14 +38,21 @@ User.init(
         mobile: {
             type: DataTypes.STRING,
             unique: true,
+            validate: {
+                is: /^\+{0,1}[0-9]+$/i, // simplified mobile number validation
+            },
         },
         postcode: {
             type: DataTypes.STRING,
+            validate: {
+                isNumeric: true,
+                // is: /^[0-9]+$/i, // simplified post code validation
+            },
         },
     },
     {
         sequelize,
-        tableName: 'user',
+        tableName: 'users',
     }
 );
 

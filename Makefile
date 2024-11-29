@@ -4,3 +4,6 @@ up:
 
 down:
 	docker-compose down
+
+test:
+	cd server && npm test

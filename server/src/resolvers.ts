@@ -6,10 +6,12 @@ import Lead from './models/Lead.js';
 export const resolvers = {
     Query: {
         users: async () => {
+            /* unused query; decided to keep in case it's needed in the future */
             const users = await User.findAll();
             return users;
         },
         user: async (_, { id }) => {
+            /* unused query; decided to keep in case it's needed in the future */
             const user = await User.findOne({
                 where: { id: id }
             });
@@ -65,9 +67,10 @@ export const resolvers = {
                 services
             } = input;
 
+            let t;
             try {
                 // Use transaction since we're inserting into 2 diff tables
-                const t: Transaction = await sequelize.transaction();
+                t = await sequelize.transaction();
                 const user = await User.create({
                     name: name,
                     email: email,
@@ -75,12 +78,14 @@ export const resolvers = {
                     postcode: postcode,
                 }, { transaction: t });
 
-                for (let service of services) {
-                    await Lead.create({
+                const servicesQuery = services.map(service => {
+                    return {
                         user: user.id,
-                        service: service,
-                    }, { transaction: t });
-                }
+                        service,
+                    }
+                });
+
+                await Lead.bulkCreate(servicesQuery, {transaction: t});
 
                 // If the execution reaches this line, no errors were thrown.
                 // We commit the transaction.
@@ -89,7 +94,10 @@ export const resolvers = {
                 return Object.assign(user, {services: services});
             }
             catch(err) {
-                console.log("err", err);
+                if (t) {
+                    await t.rollback();
+                } // Rollback on error
+                
                 // Check for Unique Constraint Error (for duplicate email or mobile)
                 if (err.name == 'SequelizeUniqueConstraintError') {
                     throw new Error('Email or mobile already registered.');

@@ -12,29 +12,32 @@ import {
   FormControl,
   FormHelperText,
   Button,
-  Link,
 } from "@mui/material";
+import SuccessBanner from "./SuccessBanner";
+import FailureBanner from "./FailureBanner";
 
 const RegisterForm: React.FC = () => {
-  const [status, setStatus] = useState<{ type: string }>();
-  const [name, setName] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [mobile, setMobile] = useState<string | undefined>();
-  const [postcode, setPostcode] = useState<string | undefined>();
-  const [res, setRes] = useState<{
-    id: number;
-    name: string;
-    email: string;
-    mobile: string;
-    postcode: string;
-    services: string[];
-  }>();
+  const [status, setStatus] = useState<{ type: string; message: string }>();
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [mobile, setMobile] = useState<string>("");
+  const [postcode, setPostcode] = useState<string>("");
   const [checkboxes, setCheckboxes] = React.useState({
     PICKUP: false,
     DELIVERY: false,
     PAYMENT: false,
   });
   const [submit, setSubmit] = useState<boolean>(false);
+  const [helperText, setHelperText] = useState({
+    email: "",
+    mobile: "",
+    postcode: "",
+  });
+  const [validationError, setValidationError] = useState({
+    email: false,
+    mobile: false,
+    postcode: false,
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCheckboxes({
@@ -50,13 +53,116 @@ const RegisterForm: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      setRes(data.register);
+      setStatus({ type: "success", message: "" });
     }
   }, [data]);
 
+  useEffect(() => {
+    if (error) {
+      setStatus({ type: "error", message: error.message });
+    }
+  }, [error]);
+
+  const validateEmail = (email: string) => {
+    if (!email) {
+      setValidationError(
+        Object.assign(validationError, {
+          email: true,
+        })
+      );
+      setHelperText(
+        Object.assign(helperText, {
+          email: "This field is required.",
+        })
+      );
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setValidationError(
+        Object.assign(validationError, {
+          email: true,
+        })
+      );
+      setHelperText(
+        Object.assign(helperText, {
+          email: "Please enter a valid email address.",
+        })
+      );
+    } else {
+      setValidationError(
+        Object.assign(validationError, {
+          email: false,
+        })
+      );
+      setHelperText(
+        Object.assign(helperText, {
+          email: "",
+        })
+      );
+    }
+  };
+
+  const validateMobile = (mobile: string) => {
+    if (mobile.length && !/^\+{0,1}[0-9]+$/.test(mobile)) {
+      setValidationError(
+        Object.assign(validationError, {
+          mobile: true,
+        })
+      );
+      setHelperText(
+        Object.assign(helperText, {
+          mobile: "Please enter a valid mobile number.",
+        })
+      );
+    } else {
+      setValidationError(
+        Object.assign(validationError, {
+          mobile: false,
+        })
+      );
+      setHelperText(
+        Object.assign(helperText, {
+          mobile: "",
+        })
+      );
+    }
+  };
+
+  const validatePostcode = (postcode: string) => {
+    if (postcode.length && !/^[0-9]+$/.test(postcode)) {
+      setValidationError(
+        Object.assign(validationError, {
+          postcode: true,
+        })
+      );
+      setHelperText(
+        Object.assign(helperText, {
+          postcode: "Please enter a valid postcode.",
+        })
+      );
+    } else {
+      setValidationError(
+        Object.assign(validationError, {
+          postcode: false,
+        })
+      );
+      setHelperText(
+        Object.assign(helperText, {
+          postcode: "",
+        })
+      );
+    }
+  };
+
   const registerUser = () => {
+    validateEmail(email);
+    validateMobile(mobile);
+    validatePostcode(postcode);
+
     // check for required fields
-    if (!name || !email || checkboxError) {
+    if (
+      !name ||
+      checkboxError ||
+      Object.entries(validationError).filter((x) => x[1]).length // check that there are no validation errors
+    ) {
       setSubmit(true);
       return;
     }
@@ -66,8 +172,8 @@ const RegisterForm: React.FC = () => {
         input: {
           name,
           email,
-          mobile,
-          postcode,
+          mobile: mobile === "" ? undefined : mobile,
+          postcode: postcode === "" ? undefined : postcode,
           services: Object.entries(checkboxes)
             .filter((x) => x[1])
             .map((x) => x[0]),
@@ -75,21 +181,16 @@ const RegisterForm: React.FC = () => {
       },
     });
 
-    if (error) {
-      setStatus({ type: "error" });
-    } else {
-      setSubmit(false);
-      setStatus({ type: "success" });
-      setName("");
-      setEmail("");
-      setMobile(undefined);
-      setPostcode(undefined);
-      setCheckboxes({
-        PICKUP: false,
-        DELIVERY: false,
-        PAYMENT: false,
-      });
-    }
+    setSubmit(false);
+    setName("");
+    setEmail("");
+    setMobile("");
+    setPostcode("");
+    setCheckboxes({
+      PICKUP: false,
+      DELIVERY: false,
+      PAYMENT: false,
+    });
   };
 
   return (
@@ -105,7 +206,7 @@ const RegisterForm: React.FC = () => {
           <Box
             component="form"
             sx={{
-              "& .MuiTextField-root": { m: 0.5, width: "30ch" },
+              "& .MuiTextField-root": { m: 0.5, width: "40ch" },
               padding: 2,
               borderRadius: 2,
               boxShadow: 2,
@@ -117,9 +218,11 @@ const RegisterForm: React.FC = () => {
               </div>
               <div>
                 {status?.type === "success" && (
-                  <p>Successfully registered user ID: {res && res.id}</p>
+                  <SuccessBanner message="Successfully registered user." />
                 )}
-                {status?.type === "error" && <p>Failed to register user.</p>}
+                {status?.type === "error" && (
+                  <FailureBanner message={status.message} />
+                )}
               </div>
             </div>
             <div>
@@ -142,10 +245,11 @@ const RegisterForm: React.FC = () => {
                 label="Email"
                 value={email}
                 onChange={(e) => {
+                  validateEmail(e.target.value);
                   setEmail(e.target.value);
                 }}
-                error={submit && !email}
-                helperText={submit && !email ? "This field is required" : ""}
+                error={validationError.email}
+                helperText={helperText.email}
               />
             </div>
             <div>
@@ -154,8 +258,11 @@ const RegisterForm: React.FC = () => {
                 label="Mobile"
                 value={mobile}
                 onChange={(e) => {
+                  validateMobile(e.target.value);
                   setMobile(e.target.value);
                 }}
+                error={validationError.mobile}
+                helperText={helperText.mobile}
               />
             </div>
             <div>
@@ -164,8 +271,11 @@ const RegisterForm: React.FC = () => {
                 label="Postcode"
                 value={postcode}
                 onChange={(e) => {
+                  validatePostcode(e.target.value);
                   setPostcode(e.target.value);
                 }}
+                error={validationError.postcode}
+                helperText={helperText.postcode}
               />
             </div>
             <div>
@@ -218,18 +328,6 @@ const RegisterForm: React.FC = () => {
               </Button>
             </div>
           </Box>
-        </div>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div>
-          <Link href="/leads" underline="hover">
-            Go to Leads Page
-          </Link>
         </div>
       </Box>
     </React.Fragment>

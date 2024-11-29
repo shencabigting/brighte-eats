@@ -8,6 +8,8 @@ import {
   Paper,
   TableBody,
   TableHead,
+  Box,
+  CssBaseline,
 } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { LEAD } from "../GraphQL/Queries";
@@ -51,80 +53,90 @@ const GetUser: React.FC = () => {
   }, [data]);
 
   return (
-    <div>
-      <div>
-        <h2 style={{ textAlign: "center" }}>{service}</h2>
-      </div>
-      <div>
-        <h3 style={{ textAlign: "center" }}>Summary</h3>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Service Name</TableCell>
-                <TableCell>Number of Interested Users</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>{service}</TableCell>
-                <TableCell>{lead && lead.count}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
-      <div>
-        <h3 style={{ textAlign: "center" }}>Per Postcode Data</h3>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Postcode</TableCell>
-                <TableCell>Users Interested in {service}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Object.entries(postcodes).map((postcode) => {
-                return (
+    <React.Fragment>
+      <CssBaseline />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div>
+          <div>
+            <h2 style={{ textAlign: "center" }}>{service}</h2>
+          </div>
+          <div>
+            <h3 style={{ textAlign: "center" }}>Summary</h3>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
                   <TableRow>
-                    <TableCell>{postcode[0]}</TableCell>
-                    <TableCell>{postcode[1]}</TableCell>
+                    <TableCell>Service Name</TableCell>
+                    <TableCell>Number of Interested Users</TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
-      <div>
-        <h3 style={{ textAlign: "center" }}>Users Data</h3>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Mobile</TableCell>
-                <TableCell>Postcode</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {lead?.users.map((user) => {
-                return (
+                </TableHead>
+                <TableBody>
                   <TableRow>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.mobile}</TableCell>
-                    <TableCell>{user.postcode}</TableCell>
+                    <TableCell>{service}</TableCell>
+                    <TableCell>{lead && lead.count}</TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
-    </div>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+          <div>
+            <h3 style={{ textAlign: "center" }}>Per Postcode Data</h3>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Postcode</TableCell>
+                    <TableCell>Users Interested in {service}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {Object.entries(postcodes).map((postcode) => {
+                    return (
+                      <TableRow>
+                        <TableCell>{postcode[0]}</TableCell>
+                        <TableCell>{postcode[1]}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+          <div>
+            <h3 style={{ textAlign: "center" }}>Users Data</h3>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Mobile</TableCell>
+                    <TableCell>Postcode</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {lead?.users.map((user) => {
+                    return (
+                      <TableRow>
+                        <TableCell>{user.name}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.mobile}</TableCell>
+                        <TableCell>{user.postcode}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
+      </Box>
+    </React.Fragment>
   );
 };
 

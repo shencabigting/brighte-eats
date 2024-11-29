@@ -22,7 +22,7 @@ describe('register mutation', () => {
         jest.spyOn(sequelize, 'transaction').mockImplementation(() => mockTransaction);
         // Mock create functions of User and Lead models
         User.create = jest.fn();
-        Lead.create = jest.fn().mockResolvedValue({});
+        Lead.bulkCreate = jest.fn().mockResolvedValue({});
 
         mockInput = {
             name: 'John Doe',
@@ -48,8 +48,8 @@ describe('register mutation', () => {
     
         // Assert database call and result
         expect(User.create).toHaveBeenCalledWith(mockInput, { transaction: mockTransaction });
-        // Assert that Lead.create have been called the same number of times as there are services in user's selection
-        expect(Lead.create).toHaveBeenCalledTimes(services.length);
+        // Assert that Lead.bulkCreate have been called the same number of times as there are services in user's selection
+        expect(Lead.bulkCreate).toHaveBeenCalledWith([{ user: 1, service: 'PICKUP' }], { transaction: mockTransaction });
         expect(result).toEqual(Object.assign(mockUser));
     });
 
@@ -63,7 +63,7 @@ describe('register mutation', () => {
     
         // Assert that the model create functions have not been called
         expect(User.create).toHaveBeenCalledTimes(0);
-        expect(Lead.create).toHaveBeenCalledTimes(0);
+        expect(Lead.bulkCreate).toHaveBeenCalledTimes(0);
     });
 
     it('should throw correct error if call to User.create throws SequelizeUniqueConstraintError', async () => {
@@ -79,8 +79,8 @@ describe('register mutation', () => {
         expect(User.create).toHaveBeenCalledTimes(1);
         expect(User.create).toHaveBeenCalledWith(mockInput, { transaction: mockTransaction });
         
-        // Assert that Lead.create has not been called
-        expect(Lead.create).toHaveBeenCalledTimes(0);
+        // Assert that Lead.bulkCreate has not been called
+        expect(Lead.bulkCreate).toHaveBeenCalledTimes(0);
     });
 
     it('should throw generic error if call to User.create throws an error', async () => {
@@ -96,16 +96,16 @@ describe('register mutation', () => {
         expect(User.create).toHaveBeenCalledTimes(1);
         expect(User.create).toHaveBeenCalledWith(mockInput, { transaction: mockTransaction });
         
-        // Assert that Lead.create has not been called
-        expect(Lead.create).toHaveBeenCalledTimes(0);
+        // Assert that Lead.bulkCreate has not been called
+        expect(Lead.bulkCreate).toHaveBeenCalledTimes(0);
     });
 
-    it('should throw generic error if call to Lead.create throws an error', async () => {
+    it('should throw generic error if call to Lead.bulkCreate throws an error', async () => {
         const mockUser = { id: 1, ...mockInput };
         (User.create as jest.Mock).mockResolvedValue(mockUser);
 
-        // Mock the Lead.create to throw a generic error
-        (Lead.create as jest.Mock).mockRejectedValue(new Error('Error'));
+        // Mock the Lead.bulkCreate to throw a generic error
+        (Lead.bulkCreate as jest.Mock).mockRejectedValue(new Error('Error'));
 
         // Call register mutation and
         // assert that register rejects with the expected error
@@ -116,7 +116,7 @@ describe('register mutation', () => {
         expect(User.create).toHaveBeenCalledTimes(1);
         expect(User.create).toHaveBeenCalledWith(mockInput, { transaction: mockTransaction });
         
-        // Assert that Lead.create have been called only once
-        expect(Lead.create).toHaveBeenCalledTimes(1);
+        // Assert that Lead.bulkCreate have been called only once
+        expect(Lead.bulkCreate).toHaveBeenCalledWith([{ user: 1, service: 'PICKUP' }], { transaction: mockTransaction });
     });
 });

@@ -66,6 +66,12 @@ If not using Docker, ensure you have met the following requirements:
 
    ```
 
+5. **To run unit tests**
+
+   ```bash
+   make test
+   ```
+
 ## Installation (Not Using Docker)
 
 1. **Clone the repository:**
@@ -87,9 +93,10 @@ If not using Docker, ensure you have met the following requirements:
    ```
 
 3. **Make sure you have a running MySQL instance**
-   Use init.sql to create the database tables
+   \Use init.sql to create the database tables
 
 4. **Install all dependencies and run the GraphQL server**
+   \From the project's root directory:
 
    ```bash
    cd server
@@ -98,6 +105,7 @@ If not using Docker, ensure you have met the following requirements:
    ```
 
 5. **Install all dependencies and run the React client**
+   \From the project's root directory:
 
    ```bash
    cd client

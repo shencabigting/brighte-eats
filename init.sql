@@ -1,9 +1,9 @@
-CREATE TABLE `user` (
+CREATE TABLE `users` (
     `id` INT unsigned NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `mobile` VARCHAR(255) DEFAULT NULL,
-    `postcode` VARCHAR(255) DEFAULT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `mobile` VARCHAR(100) DEFAULT NULL,
+    `postcode` VARCHAR(100) DEFAULT NULL,
     `createdAt` DATETIME NOT NULL,
     `updatedAt` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
@@ -11,11 +11,14 @@ CREATE TABLE `user` (
     UNIQUE KEY `mobile` (`mobile`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `lead` (
+CREATE TABLE `data` (
     `id` INT unsigned NOT NULL AUTO_INCREMENT,
-    `user` INT unsigned NOT NULL,
-    `service` VARCHAR(255) NOT NULL,
+    `user_id` INT unsigned NOT NULL,
+    `service` VARCHAR(10) NOT NULL,
     `createdAt` DATETIME NOT NULL,
     `updatedAt` DATETIME NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `user_service` (`user_id`, `service`),
+    INDEX `idx_service` (`service`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;

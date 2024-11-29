@@ -20,6 +20,7 @@ Lead.init(
         user: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
+            field: "user_id",
         },
         service: {
             type: DataTypes.STRING,
@@ -28,7 +29,16 @@ Lead.init(
     },
     {
         sequelize,
-        tableName: 'lead',
+        tableName: 'data',
+        indexes: [
+            {
+                unique: true,
+                fields: ['user', 'service'] // unique key on user and service fields
+            },
+            {
+              fields: ['service'] // add index to service field
+            }
+        ]
     }
 );
 
