@@ -4,6 +4,8 @@
 
 Take home exam for Brighte Capital application. A simple application for registering user interests and displaying data.
 
+![Screen Recording 2024-11-29 at 8 37 45 AM](https://github.com/user-attachments/assets/965ba3b4-3023-434e-ac5f-b1267f8dc8c8)
+
 ## Features
 
 - **CRUD Operations:** Create, Read, ~~Update~~, ~~Delete~~ operations for managing entities.
