@@ -205,6 +205,7 @@ const RegisterForm: React.FC = () => {
         <div>
           <Box
             component="form"
+            autoComplete="off"
             sx={{
               "& .MuiTextField-root": { m: 0.5, width: "40ch" },
               padding: 2,
@@ -235,7 +236,7 @@ const RegisterForm: React.FC = () => {
                   setName(e.target.value);
                 }}
                 error={submit && !name}
-                helperText={submit && !name ? "This field is required" : ""}
+                helperText={submit && !name ? "This field is required." : ""}
               />
             </div>
             <div>
