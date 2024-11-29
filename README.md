@@ -2,7 +2,7 @@
 
 ## Description
 
-edit later
+Take home exam for Brighte Capital application. A simple application for registering user interests and displaying data.
 
 ## Features
 
