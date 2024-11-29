@@ -59,14 +59,20 @@ If not using Docker, ensure you have met the following requirements:
 
    ```
 
-4. **To shutdown the application**
+4. **Access the application via the following endpoint:**
+
+   ```bash
+   http://localhost:3000/
+   ```
+
+5. **To shutdown the application**
 
    ```bash
    make down
 
    ```
 
-5. **To run unit tests**
+6. **To run unit tests**
 
    ```bash
    make test
@@ -93,10 +99,12 @@ If not using Docker, ensure you have met the following requirements:
    ```
 
 3. **Make sure you have a running MySQL instance**
-   \Use init.sql to create the database tables
+
+   Use init.sql to create the database tables
 
 4. **Install all dependencies and run the GraphQL server**
-   \From the project's root directory:
+
+   From the project's root directory:
 
    ```bash
    cd server
@@ -105,10 +113,19 @@ If not using Docker, ensure you have met the following requirements:
    ```
 
 5. **Install all dependencies and run the React client**
-   \From the project's root directory:
+
+   From the project's root directory:
 
    ```bash
    cd client
    npm install
    npm start
    ```
+
+6. **Access the application via the following endpoint:**
+
+   ```bash
+   http://localhost:3000/
+   ```
+
+ 
