@@ -39,7 +39,7 @@ User.init(
             type: DataTypes.STRING,
             unique: true,
             validate: {
-                is: /^\+{0,1}[0-9]+$/i, // simplified mobile number validation
+                is: /^\+?\d+$/i, // simplified mobile number validation
             },
         },
         postcode: {

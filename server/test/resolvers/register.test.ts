@@ -43,7 +43,6 @@ describe('register mutation', () => {
         
         // Call register mutation
         const result = await register({}, { input: mockInput });
-        const services = mockInput.services;
         delete mockInput.services;
     
         // Assert database call and result

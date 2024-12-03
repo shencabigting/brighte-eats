@@ -1,4 +1,3 @@
-import { Transaction } from 'sequelize';
 import sequelize from './sequelize.js';
 import User from './models/User.js';
 import Lead from './models/Lead.js';

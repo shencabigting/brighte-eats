@@ -1,6 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../sequelize.js';
-import User from './User.js';
 
 class Lead extends Model {
     public id!: number;
