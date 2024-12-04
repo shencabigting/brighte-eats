@@ -21,7 +21,7 @@ services:
       context: ./client
     container_name: client_container
     ports:
-      - "3000:3000" # Expose the API on port 4000
+      - "80:80" # Expose the API on port 4000
     depends_on:
       - server
     networks:
