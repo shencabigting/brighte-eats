@@ -17,8 +17,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      # Initialize Terraform in the 'terraform' directory
       - name: Initialize Terraform
         run: terraform init
+        working-directory: ./infra
 
+      # Validate Terraform configuration
+      - name: Validate Terraform Configuration
+        run: terraform validate
+        working-directory: ./infra
+
+      # Apply the Terraform configuration
       - name: Apply Terraform
         run: terraform apply -auto-approve
+        working-directory: ./infra
