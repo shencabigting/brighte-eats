@@ -1,0 +1,44 @@
+name: CI/CD for ECS Deployment
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push backend Docker image
+        run: |
+          docker build -f ./backend/Dockerfile -t backend-image .
+          docker tag backend-image:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/backend-repository:latest
+          docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/backend-repository:latest
+
+      - name: Build and push frontend Docker image
+        run: |
+          docker build -f ./frontend/Dockerfile -t frontend-image .
+          docker tag frontend-image:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend-repository:latest
+          docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend-repository:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy ECS Service
+        run: |
+          ecs-cli configure --cluster app-cluster --region us-east-1 --default-launch-type FARGATE
+          ecs-cli compose --file docker-compose.yml service up
