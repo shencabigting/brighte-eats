@@ -1,5 +1,10 @@
 name: CI/CD for ECS Deployment
 
+on:
+  push:
+    branches:
+      - dev
+
 jobs:
   build:
     runs-on: ubuntu-latest
