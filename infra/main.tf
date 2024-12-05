@@ -23,7 +23,6 @@ resource "aws_db_instance" "mysql_db" {
 resource "aws_security_group" "db_sg" {
   name        = "db_sg"
   description = "Security group for RDS"
-  vpc_id      = aws_vpc.main_vpc.id
 }
 
 # Create ECS Cluster
