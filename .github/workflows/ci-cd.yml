@@ -90,7 +90,7 @@ jobs:
         with:
           task-definition: backend-task-definition.json
           container-name: backend
-          image: ${{ needs.build.outputs.backend-image }}
+          image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend-repository:latest
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
