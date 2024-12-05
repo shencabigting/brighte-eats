@@ -44,6 +44,10 @@ jobs:
           docker push $AWS_IMAGE_NAME
           echo "image=$AWS_IMAGE_NAME" >> $GITHUB_OUTPUT
 
+      - name: Debug Output
+        run: |
+          cat $GITHUB_OUTPUT
+
       # - name: Build and push frontend Docker image
       #   run: |
       #     cd ./client
