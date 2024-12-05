@@ -6,6 +6,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      TF_VAR_aws_ecr_backend_image_name: ${{ secrets.TF_VAR_AWS_ECR_BACKEND_IMAGE_NAME }}
+      TF_VAR_aws_ecr_frontend_image_name: ${{ secrets.TF_VAR_AWS_ECR_FRONTEND_IMAGE_NAME }}
+      TF_VAR_db_name: ${{ secrets.TF_VAR_DB_NAME }}
+      TF_VAR_db_password: ${{ secrets.TF_VAR_DB_PASSWORD }}
+      TF_VAR_db_username: ${{ secrets.TF_VAR_DB_USERNAME }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
