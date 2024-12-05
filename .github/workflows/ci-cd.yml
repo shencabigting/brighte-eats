@@ -3,11 +3,15 @@ name: CI/CD for ECS Deployment
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_REGION: ap-southeast-1
 
     steps:
       - name: Checkout repository
@@ -21,15 +25,15 @@ jobs:
 
       - name: Build and push backend Docker image
         run: |
-          docker build -f ./backend/Dockerfile -t backend-image .
-          docker tag backend-image:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/backend-repository:latest
-          docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/backend-repository:latest
+          docker build -f ./server/Dockerfile -t backend-image .
+          docker tag backend-image:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/backend-repository:latest
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/backend-repository:latest
 
       - name: Build and push frontend Docker image
         run: |
-          docker build -f ./frontend/Dockerfile -t frontend-image .
-          docker tag frontend-image:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend-repository:latest
-          docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/frontend-repository:latest
+          docker build -f ./client/Dockerfile -t frontend-image .
+          docker tag frontend-image:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend-repository:latest
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend-repository:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -41,9 +45,9 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: $AWS_REGION
 
       - name: Deploy ECS Service
         run: |
-          ecs-cli configure --cluster app-cluster --region us-east-1 --default-launch-type FARGATE
+          ecs-cli configure --cluster app-cluster --region $AWS_REGION --default-launch-type FARGATE
           ecs-cli compose --file docker-compose.yml service up
