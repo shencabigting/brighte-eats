@@ -91,6 +91,12 @@ jobs:
           task-definition: backend-task-definition.json
           container-name: backend
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend-repository:latest
+          environment-variables: |
+            DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+            DATABASE_PORT: 3306
+            DATABASE_USER: ${{ secrets.TF_VAR_DB_USERNAME }}
+            DATABASE_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }}
+            DATABASE_NAME: ${{ secrets.TF_VAR_DB_NAME }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2

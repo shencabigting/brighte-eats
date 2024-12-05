@@ -47,6 +47,38 @@ resource "aws_security_group" "db_sg" {
   name        = "db_sg"
   description = "Security group for RDS"
   vpc_id      = aws_vpc.main_vpc.id
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]  # Allow traffic from within the VPC
+  }
+}
+
+# Create security group for backend
+resource "aws_security_group" "backend_sg" {
+  name        = "backend_sg"
+  description = "Security group for backend"
+  vpc_id      = aws_vpc.main_vpc.id
+  ingress {
+    from_port   = 4000
+    to_port     = 4000
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]  # Allow traffic from within the VPC
+  }
+}
+
+# Create security group for frontend
+resource "aws_security_group" "frontend_sg" {
+  name        = "frontend_sg"
+  description = "Security group for fronted"
+  vpc_id      = aws_vpc.main_vpc.id
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]  # Allow traffic from within the VPC
+  }
 }
 
 # Create ECS Cluster
@@ -79,15 +111,15 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_attachment"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-data "aws_iam_policy_document" "ecs_assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
-    }
-  }
-}
+# data "aws_iam_policy_document" "ecs_assume_role_policy" {
+#   statement {
+#     actions = ["sts:AssumeRole"]
+#     principals {
+#       type        = "Service"
+#       identifiers = ["ecs-tasks.amazonaws.com"]
+#     }
+#   }
+# }
 
 # ECS task definition for backend
 resource "aws_ecs_task_definition" "backend_task" {
@@ -158,7 +190,7 @@ resource "aws_ecs_service" "backend_service" {
   launch_type     = "FARGATE"
   network_configuration {
     subnets          = [aws_subnet.subnet_1.id]
-    security_groups = [aws_security_group.db_sg.id]
+    security_groups = [aws_security_group.backend_sg.id]
   }
 }
 
@@ -171,7 +203,7 @@ resource "aws_ecs_service" "frontend_service" {
   launch_type     = "FARGATE"
   network_configuration {
     subnets          = [aws_subnet.subnet_1.id]
-    security_groups = [aws_security_group.db_sg.id]
+    security_groups = [aws_security_group.frontend_sg.id]
   }
 }
 
@@ -207,6 +239,15 @@ resource "aws_ecr_repository" "frontend_repository" {
   lifecycle {
     prevent_destroy = true # Optional: prevent accidental deletion of the repository
   }
+}
+
+# Create a VPC endpoint for ECR (PrivateLink)
+resource "aws_vpc_endpoint" "ecr_endpoint" {
+  vpc_id            = aws_vpc.main_vpc.id
+  service_name      = "com.amazonaws.ap-southeast-1.ecr.api"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [aws_subnet.subnet_1.id]
+  private_dns_enabled = true  # Enable DNS to resolve ECR endpoint privately
 }
 
 # Outputs for important information
