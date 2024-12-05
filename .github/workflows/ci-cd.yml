@@ -13,6 +13,7 @@ jobs:
     env:
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_IMAGE_NAME: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/backend-repository:latest
 
     steps:
       - name: Checkout repository
@@ -36,9 +37,9 @@ jobs:
         run: |
           cd ./server
           docker build -f Dockerfile -t backend-image .
-          docker tag backend-image:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/backend-repository:latest
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/backend-repository:latest
-          echo "backend_image=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/backend-repository:latest" >> $GITHUB_OUTPUT
+          docker tag backend-image:latest $AWS_IMAGE_NAME
+          docker push $AWS_IMAGE_NAME
+          echo "backend_image=$AWS_IMAGE_NAME" >> $GITHUB_OUTPUT
 
       # - name: Build and push frontend Docker image
       #   run: |
@@ -56,12 +57,13 @@ jobs:
         run: |
           echo "Image URL: ${{ needs.build.steps.build-backend-image.outputs.backend_image }}"
           echo "Image URL: ${{ needs.build.outputs.backend_image }}"
+          echo "Image URL: ${{ needs.build }}"
 
-      - name: Install Amazon ECS CLI V2
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+      # - name: Install Amazon ECS CLI V2
+      #   run: |
+      #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      #     unzip awscliv2.zip
+      #     sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
 
       - name: Verify ECS CLI Installation
         run: aws --version
