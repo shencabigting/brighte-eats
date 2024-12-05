@@ -57,7 +57,7 @@ jobs:
           sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
 
       - name: Verify ECS CLI Installation
-        run: ecs-cli --version
+        run: aws --version
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
@@ -68,5 +68,5 @@ jobs:
 
       - name: Deploy ECS Service
         run: |
-          ecs-cli configure --cluster app-cluster --region $AWS_REGION --default-launch-type FARGATE
-          ecs-cli compose --file docker-compose.yml service up
+          aws ecs create-cluster --cluster-name app-cluster --region $AWS_REGION
+          ecs-cli compose --file docker-compose.yml service up --launch-type FARGATE --cluster app-cluster
