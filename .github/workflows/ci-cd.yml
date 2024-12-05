@@ -52,6 +52,11 @@ jobs:
     needs: build
 
     steps:
+      - name: Debug Image URL
+        run: |
+          echo "Image URL: ${{ needs.build.steps.build-backend-image.outputs.backend_image }}"
+          echo "Image URL: ${{ needs.build.outputs.backend_image }}"
+
       - name: Install Amazon ECS CLI V2
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
