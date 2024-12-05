@@ -56,8 +56,27 @@ resource "aws_ecs_cluster" "app_cluster" {
 
 # IAM Role for ECS Tasks
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name               = "ecs-task-execution-role"
-  assume_role_policy = data.aws_iam_policy_document.ecs_assume_role_policy.json
+  name = "ecs-task-execution-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action    = "sts:AssumeRole"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Effect    = "Allow"
+        Sid       = ""
+      }
+    ]
+  })
+}
+
+# Attach the AmazonECSTaskExecutionRolePolicy to IAM Role
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_attachment" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonECSTaskExecutionRolePolicy"
 }
 
 data "aws_iam_policy_document" "ecs_assume_role_policy" {
@@ -77,7 +96,9 @@ resource "aws_ecs_task_definition" "backend_task" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
-  
+
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
+
   container_definitions = jsonencode([{
     name      = "backend"
     image     = "your-backend-image"
@@ -114,6 +135,8 @@ resource "aws_ecs_task_definition" "frontend_task" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
+
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([{
     name      = "frontend"
