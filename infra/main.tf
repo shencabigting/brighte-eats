@@ -152,6 +152,40 @@ resource "aws_ecs_service" "frontend_service" {
   }
 }
 
+resource "aws_ecr_repository" "backend_repository" {
+  name = "backend-repository"
+
+  image_tag_mutability = "MUTABLE"
+  image_scanning_configuration {
+    scan_on_push = true # Enable image scanning on push
+  }
+
+  encryption_configuration {
+    encryption_type = "AES256" # Default encryption (AES256)
+  }
+
+  lifecycle {
+    prevent_destroy = true # Optional: prevent accidental deletion of the repository
+  }
+}
+
+resource "aws_ecr_repository" "frontend_repository" {
+  name = "frontend-repository"
+
+  image_tag_mutability = "MUTABLE"
+  image_scanning_configuration {
+    scan_on_push = true # Enable image scanning on push
+  }
+
+  encryption_configuration {
+    encryption_type = "AES256" # Default encryption (AES256)
+  }
+
+  lifecycle {
+    prevent_destroy = true # Optional: prevent accidental deletion of the repository
+  }
+}
+
 # Outputs for important information
 output "db_endpoint" {
   value = aws_db_instance.mysql_db.endpoint
