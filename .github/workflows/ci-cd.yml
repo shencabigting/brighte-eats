@@ -55,9 +55,8 @@ jobs:
     steps:
       - name: Debug Image URL
         run: |
-          echo "Image URL: ${{ needs.build.steps.build-backend-image.outputs.backend_image }}"
-          echo "Image URL: ${{ needs.build.outputs.backend_image }}"
-          echo "Image URL: ${{ needs.build }}"
+          echo "Image URL: ${{ needs.build.steps }}"
+          echo "Image URL: ${{ needs.build.outputs }}"
 
       # - name: Install Amazon ECS CLI V2
       #   run: |
