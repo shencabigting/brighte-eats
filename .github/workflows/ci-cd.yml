@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    outputs:
+      backend-image: ${{ steps.build-backend-image.outputs.image }}
+
     env:
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
@@ -39,7 +42,7 @@ jobs:
           docker build -f Dockerfile -t backend-image .
           docker tag backend-image:latest $AWS_IMAGE_NAME
           docker push $AWS_IMAGE_NAME
-          echo "backend_image=$AWS_IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "image=$AWS_IMAGE_NAME" >> $GITHUB_OUTPUT
 
       # - name: Build and push frontend Docker image
       #   run: |
@@ -55,8 +58,7 @@ jobs:
     steps:
       - name: Debug Image URL
         run: |
-          echo "Image URL: ${{ needs.build.output.backend_image }}"
-          echo "Image URL: ${{ needs.build.output.build-backend-image }}"
+          echo "Image URL: ${{ needs.build.outputs.backend-image }}"
 
       # - name: Install Amazon ECS CLI V2
       #   run: |
@@ -84,7 +86,7 @@ jobs:
         with:
           task-definition: backend-task-definition.json
           container-name: backend
-          image: ${{ needs.build.outputs.backend_image }}
+          image: ${{ needs.build.outputs.backend-image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
