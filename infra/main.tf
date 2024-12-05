@@ -2,21 +2,37 @@ provider "aws" {
   region = "ap-southeast-1"
 }
 
+# VPC and Subnet setup (You can use existing VPC or create new one)
+resource "aws_vpc" "main_vpc" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "main_subnet" {
+  vpc_id     = aws_vpc.main_vpc.id
+  cidr_block = "10.0.1.0/24"
+}
+
+resource "aws_db_subnet_group" "default" {
+  name       = "db_subnet_group"
+  subnet_ids = [aws_subnet.main_subnet.id]
+}
+
 # Configure MySQL RDS instance
 resource "aws_db_instance" "mysql_db" {
-  allocated_storage    = 20
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = "db.t3.micro"
-  db_name              = var.db_name
-  username             = var.db_username
-  password             = var.db_password
-  skip_final_snapshot  = true
-  publicly_accessible  = true
+  allocated_storage       = 20
+  storage_type            = "gp2"
+  engine                  = "mysql"
+  engine_version          = "8.0"
+  instance_class          = "db.t3.micro"
+  db_name                 = var.db_name
+  username                = var.db_username
+  password                = var.db_password
+  skip_final_snapshot     = true
+  publicly_accessible     = true
   backup_retention_period = 7
-  multi_az             = false
-  vpc_security_group_ids = [aws_security_group.db_sg.id]
+  multi_az                = false
+  vpc_security_group_ids  = [aws_security_group.db_sg.id]
+  db_subnet_group_name    = aws_db_subnet_group.default.db_subnet_group
 }
 
 # Create security group for RDS
@@ -45,16 +61,6 @@ data "aws_iam_policy_document" "ecs_assume_role_policy" {
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
-}
-
-# VPC and Subnet setup (You can use existing VPC or create new one)
-resource "aws_vpc" "main_vpc" {
-  cidr_block = "10.0.0.0/16"
-}
-
-resource "aws_subnet" "main_subnet" {
-  vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.1.0/24"
 }
 
 # ECS task definition for backend
