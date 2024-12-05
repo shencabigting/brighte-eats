@@ -16,3 +16,17 @@ variable "db_password" {
   sensitive   = true
   default     = "my-secret-password"
 }
+
+variable "aws_ecr_backend_image_name" {
+  description = "AWS ECR Image Name"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "aws_ecr_frontend_image_name" {
+  description = "AWS ECR Image Name"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
