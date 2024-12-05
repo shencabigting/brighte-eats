@@ -7,14 +7,19 @@ resource "aws_vpc" "main_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
-resource "aws_subnet" "main_subnet" {
+resource "aws_subnet" "subnet_1" {
   vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "10.0.1.0/24"
 }
 
+resource "aws_subnet" "subnet_2" {
+  vpc_id     = aws_vpc.main_vpc.id
+  cidr_block = "10.0.2.0/24"
+}
+
 resource "aws_db_subnet_group" "default" {
   name       = "db_subnet_group"
-  subnet_ids = [aws_subnet.main_subnet.id]
+  subnet_ids = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id]
 }
 
 # Configure MySQL RDS instance
@@ -127,7 +132,7 @@ resource "aws_ecs_service" "backend_service" {
   desired_count   = 1
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = [aws_subnet.main_subnet.id]
+    subnets          = [aws_subnet.subnet_1.id]
     security_groups = [aws_security_group.db_sg.id]
   }
 }
@@ -140,7 +145,7 @@ resource "aws_ecs_service" "frontend_service" {
   desired_count   = 1
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = [aws_subnet.main_subnet.id]
+    subnets          = [aws_subnet.subnet_1.id]
     security_groups = [aws_security_group.db_sg.id]
   }
 }
