@@ -32,7 +32,7 @@ resource "aws_db_instance" "mysql_db" {
   backup_retention_period = 7
   multi_az                = false
   vpc_security_group_ids  = [aws_security_group.db_sg.id]
-  db_subnet_group_name    = aws_db_subnet_group.default.db_subnet_group
+  db_subnet_group_name    = aws_db_subnet_group.default.name
 }
 
 # Create security group for RDS
