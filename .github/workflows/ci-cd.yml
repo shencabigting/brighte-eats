@@ -32,13 +32,15 @@ jobs:
 
       - name: Build and push backend Docker image
         run: |
-          docker build -f ./server/Dockerfile -t backend-image .
+          cd ./server
+          docker build -f Dockerfile -t backend-image .
           docker tag backend-image:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/backend-repository:latest
           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/backend-repository:latest
 
       - name: Build and push frontend Docker image
         run: |
-          docker build -f ./client/Dockerfile -t frontend-image .
+          cd ./client
+          docker build -f Dockerfile -t frontend-image .
           docker tag frontend-image:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend-repository:latest
           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend-repository:latest
 
