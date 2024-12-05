@@ -4,19 +4,23 @@ provider "aws" {
 
 # VPC and Subnet setup (You can use existing VPC or create new one)
 resource "aws_vpc" "main_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 }
 
 resource "aws_subnet" "subnet_1" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "ap-southeast-1a"
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "ap-southeast-1a"
+  map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "subnet_2" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "ap-southeast-1b"
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "ap-southeast-1b"
+  map_public_ip_on_launch = true
 }
 
 resource "aws_db_subnet_group" "default" {
@@ -241,14 +245,44 @@ resource "aws_ecr_repository" "frontend_repository" {
   }
 }
 
+# data "aws_iam_policy_document" "s3_ecr_access" {
+#   version = "2012-10-17"
+#   statement {
+#     sid     = "s3access"
+#     effect  = "Allow"
+#     actions = ["*"]
+# 
+#     principals {
+#       type        = "*"
+#       identifiers = ["ecs-tasks.amazonaws.com"]
+#     }
+#   }
+# }
+
 # Create a VPC endpoint for ECR (PrivateLink)
-resource "aws_vpc_endpoint" "ecr_endpoint" {
-  vpc_id            = aws_vpc.main_vpc.id
-  service_name      = "com.amazonaws.ap-southeast-1.ecr.api"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.subnet_1.id]
-  private_dns_enabled = true  # Enable DNS to resolve ECR endpoint privately
-}
+# resource "aws_vpc_endpoint" "ecr_dkr_endpoint" {
+#   vpc_id              = aws_vpc.main_vpc.id
+#   service_name        = "com.amazonaws.ap-southeast-1.ecr.dkr"
+#   vpc_endpoint_type   = "Interface"
+#   subnet_ids          = [aws_subnet.subnet_1.id]
+#   private_dns_enabled = true  # Enable DNS to resolve ECR endpoint privately
+# }
+# 
+# resource "aws_vpc_endpoint" "ecr_api_endpoint" {
+#   vpc_id              = aws_vpc.main_vpc.id
+#   service_name        = "com.amazonaws.ap-southeast-1.ecr.api"
+#   vpc_endpoint_type   = "Interface"
+#   subnet_ids          = [aws_subnet.subnet_1.id]
+#   private_dns_enabled = true  # Enable DNS to resolve ECR endpoint privately
+# }
+# 
+# resource "aws_vpc_endpoint" "s3" {
+#   vpc_id       = aws_vpc.main_vpc.id
+#   service_name = "com.amazonaws.ap-southeast-1.s3"
+#   vpc_endpoint_type = "Gateway"
+#   route_table_ids = [aws_route_table.private[0].id]
+#   policy = data.aws_iam_policy_document.s3_ecr_access.json
+# }
 
 # Outputs for important information
 output "db_endpoint" {

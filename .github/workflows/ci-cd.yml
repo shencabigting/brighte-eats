@@ -1,9 +1,9 @@
 name: CI/CD for ECS Deployment
 
 on:
-  push:
-    branches:
-      - main # Trigger on push to the main branch
+  # push:
+  #   branches:
+  #     - main # Trigger on push to the main branch
   workflow_dispatch: # Trigger manually via GitHub UI
 
 jobs:
