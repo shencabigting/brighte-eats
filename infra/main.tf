@@ -229,7 +229,7 @@ resource "aws_ecr_repository" "backend_repository" {
 }
 
 resource "aws_ecr_lifecycle_policy" "backend_repository" {
-  repository_name = aws_ecr_repository.backend_repository.name
+  repository = aws_ecr_repository.backend_repository.name
   policy = <<EOF
 {
   "rules": [
@@ -268,7 +268,7 @@ resource "aws_ecr_repository" "frontend_repository" {
 }
 
 resource "aws_ecr_lifecycle_policy" "frontend_repository" {
-  repository_name = aws_ecr_repository.frontend_repository.name
+  repository = aws_ecr_repository.frontend_repository.name
   policy = <<EOF
 {
   "rules": [
