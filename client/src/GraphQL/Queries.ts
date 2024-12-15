@@ -19,6 +19,7 @@ export const LEAD = gql`
                 id
                 mobile
                 name
+                lastname
                 postcode
             }
         }

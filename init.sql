@@ -1,6 +1,7 @@
 CREATE TABLE `users` (
     `id` INT unsigned NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
+    `lastname` VARCHAR(100) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
     `mobile` VARCHAR(100) DEFAULT NULL,
     `postcode` VARCHAR(100) DEFAULT NULL,

@@ -25,6 +25,7 @@ const GetUser: React.FC = () => {
       {
         id: number;
         name: string;
+        lastname: string;
         email: string;
         mobile: string;
         postcode: string;
@@ -114,6 +115,7 @@ const GetUser: React.FC = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Name</TableCell>
+                    <TableCell>Lastname</TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>Mobile</TableCell>
                     <TableCell>Postcode</TableCell>
@@ -124,6 +126,7 @@ const GetUser: React.FC = () => {
                     return (
                       <TableRow>
                         <TableCell>{user.name}</TableCell>
+                        <TableCell>{user.lastname}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>{user.mobile}</TableCell>
                         <TableCell>{user.postcode}</TableCell>

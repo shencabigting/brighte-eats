@@ -47,6 +47,7 @@ export const resolvers = {
                     return {
                         id: x['User.id'],
                         name: x['User.name'],
+                        lastname: x['User.lastname'],
                         email: x['User.email'],
                         mobile: x['User.mobile'],
                         postcode: x['User.postcode'] || 'undisclosed',
