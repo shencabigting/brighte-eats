@@ -228,6 +228,28 @@ resource "aws_ecr_repository" "backend_repository" {
   }
 }
 
+resource "aws_ecr_lifecycle_policy" "backend_repository" {
+  repository_name = aws_ecr_repository.backend_repository.name
+  policy_text = <<EOF
+{
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "Retain only the 2 most recent images",
+      "selection": {
+        "tagStatus": "any",
+        "countType": "imageCountMoreThan",
+        "countNumber": 2
+      },
+      "action": {
+        "type": "expire"
+      }
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_ecr_repository" "frontend_repository" {
   name = "frontend-repository"
 
@@ -243,6 +265,28 @@ resource "aws_ecr_repository" "frontend_repository" {
   lifecycle {
     prevent_destroy = true # Optional: prevent accidental deletion of the repository
   }
+}
+
+resource "aws_ecr_lifecycle_policy" "frontend_repository" {
+  repository_name = aws_ecr_repository.frontend_repository.name
+  policy_text = <<EOF
+{
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "Retain only the 2 most recent images",
+      "selection": {
+        "tagStatus": "any",
+        "countType": "imageCountMoreThan",
+        "countNumber": 2
+      },
+      "action": {
+        "type": "expire"
+      }
+    }
+  ]
+}
+EOF
 }
 
 # data "aws_iam_policy_document" "s3_ecr_access" {
