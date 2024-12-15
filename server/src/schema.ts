@@ -14,6 +14,7 @@ enum Service {
 type User {
     id: ID!
     name: String
+    lastname: String
     email: String
     mobile: String
     postcode: String
@@ -38,6 +39,7 @@ type Query {
 
 input registerUserInput {
     name: String!
+    lastname: String!
     email: String!
     mobile: String
     postcode: String

@@ -61,6 +61,7 @@ export const resolvers = {
         register: async (_, { input }) => {
             const {
                 name,
+                lastname,
                 email,
                 mobile,
                 postcode,
@@ -73,6 +74,7 @@ export const resolvers = {
                 t = await sequelize.transaction();
                 const user = await User.create({
                     name: name,
+                    lastname: lastname,
                     email: email,
                     mobile: mobile,
                     postcode: postcode,

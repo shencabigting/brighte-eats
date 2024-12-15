@@ -2,6 +2,7 @@ import User from '../../src/models/User';
 
 let mockData: {
     name: string
+    lastname: string
     email: string
     mobile: string
     postcode: string
@@ -10,7 +11,8 @@ let mockData: {
 describe('User model validations', () => {
     beforeEach(() => {
         mockData = {
-            name: 'John Doe',
+            name: 'John',
+            lastname: 'Doe',
             email: 'john.doe@example.com',
             mobile: '1234567890',
             postcode: '0000',
@@ -35,6 +37,28 @@ describe('User model validations', () => {
             } catch (error) {
                 expect(error).toBeDefined();
                 expect(error.errors[0].message).toBe('Validation notEmpty on name failed');
+            }
+        });
+    });
+
+    describe('lastname field validations', () => {
+        it('should throw an error if lastname is null', async () => {
+            try {
+                delete mockData.lastname;
+                await User.build(mockData).validate();
+            } catch (error) {
+                expect(error).toBeDefined();
+                expect(error.errors[0].message).toBe('User.lastname cannot be null');
+            }
+        });
+
+        it('should throw an error if lastname is empty string', async () => {
+            try {
+                mockData.lastname = '';
+                await User.build(mockData).validate();
+            } catch (error) {
+                expect(error).toBeDefined();
+                expect(error.errors[0].message).toBe('Validation notEmpty on lastname failed');
             }
         });
     });

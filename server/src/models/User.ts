@@ -5,6 +5,7 @@ import Lead from './Lead.js';
 class User extends Model {
     public id!: number;
     public name!: string;
+    public lastname!: string;
     public email!: string;
     public mobile: string;
     public postcode: string;
@@ -20,6 +21,13 @@ User.init(
             primaryKey: true,
         },
         name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+            },
+        },
+        lastname: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
